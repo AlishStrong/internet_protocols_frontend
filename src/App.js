@@ -1,12 +1,10 @@
 import React from 'react'
-import CreateSession from './components/CreateSession'
+import Landing from './pages/Landing'
 
 
 const App = () => {
   return (
-    <div>
-      <CreateSession />
-    </div>
+    <Landing />
   )
 }
 
