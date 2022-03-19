@@ -3,7 +3,7 @@ import { Alert, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { completeNotification } from '../reducers/notificationReducer'
 
-const Notification = ({ message, title, index }) => {
+const Notification = ({ notification, index }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -11,9 +11,9 @@ const Notification = ({ message, title, index }) => {
   })
 
   return (
-    <Alert variant="danger" onClose={() => dispatch(completeNotification(index))} dismissible>
-      <Alert.Heading>{title}</Alert.Heading>
-      <p>{message}</p>
+    <Alert variant={notification.type} onClose={() => dispatch(completeNotification(index))} dismissible>
+      <Alert.Heading>{notification.title}</Alert.Heading>
+      <p>{notification.message}</p>
     </Alert>
   )
 }
@@ -23,7 +23,7 @@ const Notifications = () => {
 
   return (
     <Container className="mt-3">
-      {notifications.map((n, index) => <Notification key={index} message={n.message} title={n.title} index={index} />)}
+      {notifications.map((n, index) => <Notification key={index} notification={n} index={index} />)}
     </Container>
   )
 }

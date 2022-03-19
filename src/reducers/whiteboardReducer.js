@@ -1,28 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
-import whiteboardService from '../services/whiteboardService'
-import { notify } from './notificationReducer'
 
 const whiteboardSlice = createSlice({
   name: 'whiteboard',
-  initialState: '',
+  initialState: null,
   reducers: {
-    createWhiteboard: (state, action) => {
+    setWhiteboard: (state, action) => {
       return action.payload
-    }
+    },
+    closeWhiteboard: () => null
   }
 })
 
-export const initializeWhiteboard = (whiteboardInfo, creatorName) => {
-  return async dispatch => {
-    const { whiteboardId, error } = await whiteboardService.createWhiteboard(whiteboardInfo, creatorName)
-    if (whiteboardId) {
-      dispatch(createWhiteboard(whiteboardId))
-    } else {
-      const { message, title } = error
-      dispatch(notify('error', message, title))
-    }
-  }
-}
+export const setWhiteboardDispatcher = (whiteboard) => async dispatch => dispatch(setWhiteboard(whiteboard))
 
-export const { createWhiteboard } = whiteboardSlice.actions
+export const closeWhiteboardDispatcher = () => async dispatch => dispatch(closeWhiteboard())
+
+export const { setWhiteboard, closeWhiteboard } = whiteboardSlice.actions
 export default whiteboardSlice.reducer

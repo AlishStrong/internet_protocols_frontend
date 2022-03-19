@@ -1,28 +1,47 @@
 import React, { useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { initializeWhiteboard } from '../reducers/whiteboardReducer'
+import { useNavigate } from 'react-router-dom'
+import { notify } from '../reducers/notificationReducer'
+import { setUserDispatcher } from '../reducers/userReducer'
+import whiteboardService from '../services/whiteboardService'
+import { WHITEBOARD_CREATION } from '../utils/error.constants'
 
 const CreateWhiteboard = () => {
   const [show, setShow] = useState(false)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const createWhiteboard = async (event) => {
     event.preventDefault()
 
-    const whiteboardInfo = {
-      name: event.target.whiteboardName.value,
-      password: event.target.whiteboardPassword.value
+    const payload = {}
+    payload.creator = event.target.creatorName.value ? event.target.creatorName.value : 'Session Host'
+    payload.whiteboard = {}
+    payload.whiteboard.name = event.target.whiteboardName.value ? event.target.whiteboardName.value : 'New whiteboard session'
+    if (event.target.whiteboardPassword.value) {
+      payload.whiteboard.password = event.target.whiteboardPassword.value
     }
-    const creatorName = event.target.creatorName.value
 
     event.target.creatorName.value = ''
     event.target.whiteboardName.value = ''
     event.target.whiteboardPassword.value = ''
 
-    dispatch(initializeWhiteboard(whiteboardInfo, creatorName))
+    const { whiteboardId, error, token, hostId } = await whiteboardService.createWhiteboard(payload)
+
     handleClose()
+
+    if (whiteboardId && token) {
+      dispatch(setUserDispatcher({ token, status: 'host', userId: hostId }))
+      dispatch(notify('success', `Your token ${token}`, `Whiteboard ${whiteboardId} was successfully created`))
+      navigate('/whiteboard/' + whiteboardId)
+    }
+
+    if (error) {
+      const { message } = error
+      dispatch(notify('danger', message, WHITEBOARD_CREATION))
+    }
   }
 
   const handleShow = () => setShow(true)

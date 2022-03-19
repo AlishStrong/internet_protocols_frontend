@@ -1,31 +1,136 @@
 import axios from 'axios'
-import { SESSION_API } from '../utils/config'
-import { WHITEBOARD_CREATION } from '../utils/error.constants'
+import { BACKEND_ADDRESS, WHITEBOARD_API } from '../utils/config'
+import { REQUEST_TO_JOIN, WHITEBOARD_ACCESS, WHITEBOARD_CLOSURE, WHITEBOARD_CREATION } from '../utils/error.constants'
 
-const createWhiteboard = async (whiteboardInfo, creatorName) => {
-  return axios.post(SESSION_API, {
-    whiteboard: {
-      name: whiteboardInfo.name ?? 'New whiteboard session',
-      password: whiteboardInfo.password
-    },
-    creator: creatorName ?? 'Session Host'
-  }).then(response => {
-    if (response && response.status === '200') {
-      const { whiteboardId } = response.data
-      return { whiteboardId }
-    } else {
-      const { error } = response.data
-      throw new Error(error)
-    }
-  }).catch(({ message }) => {
-    const error = {
-      message,
-      title: WHITEBOARD_CREATION
-    }
-    return { error }
-  })
+const path = BACKEND_ADDRESS + WHITEBOARD_API
+
+const createWhiteboard = async (payload) => {
+  return axios.post(path, payload)
+    .then(response => {
+      if (response && response.status === 200) {
+        return response.data
+      } else {
+        const { error } = response.data
+        throw new Error(error)
+      }
+    }).catch(({ message }) => {
+      const error = {
+        message,
+        title: WHITEBOARD_CREATION
+      }
+      return { error }
+    })
+}
+
+const getWhiteboard = async (whiteboardId, token) => {
+  const config = {
+    headers: { Authorization: 'bearer ' + token },
+  }
+
+  return axios.get(`${path}/${whiteboardId}`, config)
+    .then(response => {
+      if (response && response.status === 200) {
+        return response.data
+      } else {
+        const { error } = response.data
+        throw new Error(error)
+      }
+    }).catch(({ message }) => {
+      const error = {
+        message,
+        title: WHITEBOARD_ACCESS
+      }
+      return { error }
+    })
+}
+
+const closeWhiteboard = (whiteboardId, token) => {
+  const config = {
+    headers: { Authorization: 'bearer ' + token },
+  }
+
+  return axios.delete(`${path}/${whiteboardId}`, config)
+    .then(response => {
+      if (response && response.status === 200) {
+        return response.data
+      } else {
+        const { error } = response.data
+        throw new Error(error)
+      }
+    }).catch(({ message }) => {
+      const error = {
+        message,
+        title: WHITEBOARD_CLOSURE
+      }
+      return { error }
+    })
+}
+
+const isProtected = (whiteboardId) => {
+  return axios.get(`${path}/is-protected/${whiteboardId}`)
+    .then(response => {
+      if (response && response.status === 200) {
+        return response.data
+      } else {
+        const { error } = response.data
+        throw new Error(error)
+      }
+    }).catch(({ message }) => {
+      const error = {
+        message,
+        title: REQUEST_TO_JOIN
+      }
+      return { error }
+    })
+}
+
+const reuqestToJoin = async (whiteboardId, requestData) =>  {
+  return axios.post(`${path}/request-to-join/${whiteboardId}`, requestData)
+    .then(response => {
+      if (response && response.status === 200) {
+        return response.data
+      } else {
+        const { error } = response.data
+        throw new Error(error)
+      }
+    }).catch(({ message }) => {
+      const error = {
+        message,
+        title: REQUEST_TO_JOIN
+      }
+      return { error }
+    })
+}
+
+const processRequest = async (whiteboardId, userId, decision, token) => {
+  const config = {
+    headers: { Authorization: 'bearer ' + token },
+  }
+
+  const decisionPayload = { whiteboardId, userId, decision }
+
+  return axios.post(`${path}/process-request-to-join`, decisionPayload, config)
+    .then(response => {
+      if (response && response.status === 200) {
+        return response.data
+      } else {
+        const { error } = response.data
+        throw new Error(error)
+      }
+    }).catch(({ message }) => {
+      const error = {
+        message,
+        title: WHITEBOARD_CLOSURE
+      }
+      return { error }
+    })
 }
 
 export default {
-  createWhiteboard
+  createWhiteboard,
+  getWhiteboard,
+  closeWhiteboard,
+  isProtected,
+  reuqestToJoin,
+  processRequest
 }
