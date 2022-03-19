@@ -5,3 +5,4 @@ export const REQUEST_TO_JOIN = 'Reuqest to join a whiteboard faced an issue!'
 
 export const UNAUTHORIZED_TITLE = 'Unauthorized'
 export const UNAUTHORIZED_BODY = 'You are not authorized to access the whiteboard'
+export const CANVAS_UPDATE = 'Canvas update faced an issue!'
