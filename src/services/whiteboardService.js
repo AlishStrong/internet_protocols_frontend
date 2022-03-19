@@ -1,18 +1,19 @@
 import axios from 'axios'
-import { SESSION_API } from '../utils/config'
+import { BACKEND_ADDRESS, WHITEBOARD_API } from '../utils/config'
 import { WHITEBOARD_CREATION } from '../utils/error.constants'
 
 const createWhiteboard = async (whiteboardInfo, creatorName) => {
-  return axios.post(SESSION_API, {
-    whiteboard: {
-      name: whiteboardInfo.name ?? 'New whiteboard session',
-      password: whiteboardInfo.password
-    },
-    creator: creatorName ?? 'Session Host'
-  }).then(response => {
-    if (response && response.status === '200') {
-      const { whiteboardId } = response.data
-      return { whiteboardId }
+  const payload = {}
+  payload.creator = creatorName ? creatorName : 'Session Host'
+  payload.whiteboard = {}
+  payload.whiteboard.name = whiteboardInfo.name ? whiteboardInfo.name : 'New whiteboard session'
+  if (whiteboardInfo.password) {
+    payload.whiteboard.password = whiteboardInfo.password
+  }
+
+  return axios.post(BACKEND_ADDRESS + WHITEBOARD_API, payload).then(response => {
+    if (response && response.status === 200) {
+      return response.data
     } else {
       const { error } = response.data
       throw new Error(error)

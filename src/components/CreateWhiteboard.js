@@ -1,12 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { initializeWhiteboard } from '../reducers/whiteboardReducer'
 
 const CreateWhiteboard = () => {
   const [show, setShow] = useState(false)
 
+  const whiteboardId = useSelector(state => state.whiteboard)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (whiteboardId) {
+      navigate('/whiteboard/' + whiteboardId)
+    }
+  })
 
   const createWhiteboard = async (event) => {
     event.preventDefault()
@@ -30,6 +38,7 @@ const CreateWhiteboard = () => {
 
   return (
     <>
+      <p>{whiteboardId}</p>
       <Button onClick={handleShow}>Create a session</Button>
 
       <Modal show={show} onHide={handleClose}>

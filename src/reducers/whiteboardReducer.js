@@ -14,12 +14,13 @@ const whiteboardSlice = createSlice({
 
 export const initializeWhiteboard = (whiteboardInfo, creatorName) => {
   return async dispatch => {
-    const { whiteboardId, error } = await whiteboardService.createWhiteboard(whiteboardInfo, creatorName)
-    if (whiteboardId) {
+    const { whiteboardId, error, token } = await whiteboardService.createWhiteboard(whiteboardInfo, creatorName)
+    if (whiteboardId && token) {
       dispatch(createWhiteboard(whiteboardId))
+      dispatch(notify('success', `Your token ${token}`, `Whiteboard ${whiteboardId} was successfully created`))
     } else {
       const { message, title } = error
-      dispatch(notify('error', message, title))
+      dispatch(notify('danger', message, title))
     }
   }
 }
