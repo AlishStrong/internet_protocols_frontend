@@ -9,6 +9,16 @@ const StickyNote = () => {
 
   const [editState, setEditState] = useState(false)
   const [text, setText] = useState('')
+  const [deltaPosition, setDeltaPos] = useState({ x: 0, y:0 })
+
+  const handleDrag = (e, ui) => {
+    const { x, y } = deltaPosition
+    setDeltaPos({
+      x: x + ui.deltaX,
+      y: y + ui.deltaY,
+    })
+  }
+
 
   const editLock = () => {
     // user clicks the edit button => editState = false / others can interact
@@ -34,11 +44,14 @@ const StickyNote = () => {
   }
 
 
+
+
   return (
-    <Draggable handle='strong'>
+    <Draggable handle='strong' onDrag={handleDrag} disabled={!editState}>
       <div className="note" id='note'>
         <strong>
           <div className="header">
+            <p>{deltaPosition.x} and {deltaPosition.y}</p>
             <button className="editLock" onClick={editLock}><i className="fas fa-edit"></i></button>
             <button className="delete" onClick={removeNote}><i className="fas fa-trash-alt"></i></button>
           </div>
