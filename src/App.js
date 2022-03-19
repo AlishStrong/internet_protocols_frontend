@@ -10,7 +10,6 @@ const App = () => {
   return (
     <Router>
       <Notifications />
-
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='whiteboard/:whiteboardId' element={<WhiteboardPage />} />

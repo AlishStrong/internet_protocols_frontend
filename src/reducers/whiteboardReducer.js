@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import whiteboardService from '../services/whiteboardService'
 import { notify } from './notificationReducer'
+import { setUserDispatcher } from './userReducer'
 
 const whiteboardSlice = createSlice({
   name: 'whiteboard',
@@ -16,8 +17,9 @@ export const initializeWhiteboard = (whiteboardInfo, creatorName) => {
   return async dispatch => {
     const { whiteboardId, error, token } = await whiteboardService.createWhiteboard(whiteboardInfo, creatorName)
     if (whiteboardId && token) {
-      dispatch(createWhiteboard(whiteboardId))
-      dispatch(notify('success', `Your token ${token}`, `Whiteboard ${whiteboardId} was successfully created`))
+      await dispatch(setUserDispatcher(token))
+      await dispatch(createWhiteboard(whiteboardId))
+      await dispatch(notify('success', `Your token ${token}`, `Whiteboard ${whiteboardId} was successfully created`))
     } else {
       const { message, title } = error
       dispatch(notify('danger', message, title))

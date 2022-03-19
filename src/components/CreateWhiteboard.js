@@ -10,6 +10,7 @@ const CreateWhiteboard = () => {
   const whiteboardId = useSelector(state => state.whiteboard)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
   useEffect(() => {
     if (whiteboardId) {
       navigate('/whiteboard/' + whiteboardId)
