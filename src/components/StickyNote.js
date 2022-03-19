@@ -51,7 +51,8 @@ const StickyNote = () => {
       <div className="note" id='note'>
         <strong>
           <div className="header">
-            <p>{deltaPosition.x} and {deltaPosition.y}</p>
+            {editState && <p style={ { color : 'white' } }>In edit mode!</p>}
+            <p>x: {deltaPosition.x}, y: {deltaPosition.y}</p>
             <button className="editLock" onClick={editLock}><i className="fas fa-edit"></i></button>
             <button className="delete" onClick={removeNote}><i className="fas fa-trash-alt"></i></button>
           </div>

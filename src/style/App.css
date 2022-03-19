@@ -46,3 +46,7 @@
 .note .hidden {
   display: none;
 }
+
+.note .commentField {
+  background-color: rgb(238, 237, 235);
+}
