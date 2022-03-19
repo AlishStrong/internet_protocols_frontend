@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import canvasReducer from './reducers/canvasReducer'
+import imageReducer from './reducers/imageReducer'
 import notificationReducer from './reducers/notificationReducer'
+import stickyNoteReducer from './reducers/stickyNoteReducer'
 import userReducer from './reducers/userReducer'
 import whiteboardReducer from './reducers/whiteboardReducer'
 
@@ -9,7 +11,9 @@ const store = configureStore({
     whiteboard: whiteboardReducer,
     notifications: notificationReducer,
     user: userReducer,
-    canvas: canvasReducer
+    canvas: canvasReducer,
+    stickyNote: stickyNoteReducer,
+    imageSticky: imageReducer
   }
 })
 

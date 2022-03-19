@@ -1,0 +1,113 @@
+
+.note {
+  background-color: #fff;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  height: 160px;
+  width: 200px;
+  position: absolute;
+}
+
+.note .header {
+  background-color: #acaf19;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem;
+}
+
+.note .header button {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+.note .main {
+  background-color: rgb(245, 232, 159);
+  overflow: auto;
+  height: 160px;
+  width: 100%;
+}
+
+.note textarea {
+  background-color: rgb(245, 232, 159);
+  outline: none;
+  font-family: inherit;
+  font-size: 1.2rem;
+  border: none;
+  width: 100%;
+  height: 160px;
+  overflow: auto;
+  resize: none;
+}
+
+.note .hidden {
+  display: none;
+}
+
+.note .commentField {
+  background-color: rgb(238, 237, 235);
+}
+
+.image {
+  background-color: #fff;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  height: 500px;
+  width: 250px;
+  position: absolute;
+}
+
+.image .header {
+  background-color: #acaf19;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem;
+}
+
+.image .header button {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+.image .main {
+  background-color: rgb(245, 232, 159);
+  overflow: auto;
+  height: 250px;
+  width: 100%;
+}
+
+.image textarea {
+  background-color: rgb(245, 232, 159);
+  outline: none;
+  font-family: inherit;
+  font-size: 1.2rem;
+  border: none;
+  width: 100%;
+  height: 250px;
+  overflow: auto;
+  resize: none;
+}
+
+.image .hidden {
+  display: none;
+}
+
+.image .commentField {
+  background-color: rgb(238, 237, 235);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+}
+
+.toolbar .btn.btn-primary{
+  margin-right: 30px;
+}

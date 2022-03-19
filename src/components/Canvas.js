@@ -28,7 +28,6 @@ const Canvas = () => {
   }
 
   const draw = (e) => {
-    // console.log('DRAW')
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
     if (isDrawing) {
@@ -46,7 +45,6 @@ const Canvas = () => {
   }
 
   const startDrawing = (e) => {
-    console.log('startDrawing')
     dispatch(setDrawing(true))
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
