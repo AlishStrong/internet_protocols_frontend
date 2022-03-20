@@ -1,35 +1,30 @@
 import React from 'react'
-import { useState } from 'react'
 import '../style/App.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 import Draggable from 'react-draggable'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { setEditState,setText,setPos } from '../reducers/stickyNoteReducer'
 
 const StickyNote = () => {
-
-  const [editState, setEditState] = useState(false)
-  const [text, setText] = useState('')
-  const [pos, setPos] = useState({ x: 0, y:0 })
+  const dispatch = useDispatch()
+  const editState = useSelector(state => state.stickyNote.editState)
+  const text = useSelector(state => state.stickyNote.text)
+  const pos = useSelector(state => state.stickyNote.pos)
 
   const handleDrag = (e, ui) => {
     const { x, y } = pos
-    setPos({
+    dispatch(setPos({
       x: x + ui.deltaX,
       y: y + ui.deltaY,
-    })
+    }))
   }
 
-
   const editLock = () => {
-    // user clicks the edit button => editState = false / others can interact
     if(editState){
-      setEditState(false)
-      console.log('need to set a state for the object in the db rather than local state')
+      dispatch(setEditState(false))
     }
-    // user clicks the edit button => state gets editState = true and user can type
     else{
-      setEditState(true)
-      console.log('need to set a state for the object in the db rather than local state')
+      dispatch(setEditState(true))
     }
   }
 
@@ -39,8 +34,7 @@ const StickyNote = () => {
   }
 
   const textInput = (e) => {
-    console.log('need to set the text in db rather than locally')
-    setText(e.target.value)
+    dispatch(setText(e.target.value))
   }
 
 
