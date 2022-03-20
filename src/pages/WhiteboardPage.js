@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import CloseWhiteboardButton from '../components/CloseWhiteboardButton'
+import InviteToWhiteboardButton from '../components/InviteToWhiteboardButton'
 import { notify } from '../reducers/notificationReducer'
 import whiteboardService from '../services/whiteboardService'
 import { UNAUTHORIZED_BODY, WHITEBOARD_ACCESS } from '../utils/error.constants'
@@ -37,6 +38,7 @@ const WhiteboardPage = () => {
         Welcome to the whiteboard {id}
           <br />
           <CloseWhiteboardButton  whiteboardId={id} token={user.token} />
+          <InviteToWhiteboardButton />
         </Container>
       </>
     )
