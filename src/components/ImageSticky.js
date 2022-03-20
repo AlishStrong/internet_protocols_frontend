@@ -47,6 +47,10 @@ const ImageSticky = () => {
     setComments(newComments)
   }
 
+  const removeImage = () => {
+    console.log('remove this image')
+  }
+
 
   //const resizeStyle = editState ? 'both' : 'none'
   // can be resizeable but wasn't really a requirement so no need for extra work ?
@@ -60,7 +64,7 @@ const ImageSticky = () => {
             <p>x: {pos.x},y: {pos.y}</p>
             {editState && <p style={ { color : 'white' } }>In edit mode!</p>}
             <button className="editLock" onClick={editLock}><i className="fas fa-edit"></i></button>
-            <button className="delete" onClick={() => {}}><i className="fas fa-trash-alt"></i></button>
+            <button className="delete" onClick={removeImage}><i className="fas fa-trash-alt"></i></button>
           </div>
         </strong>
         <Image src='https://mdbootstrap.com/img/new/slides/041.webp' fluid={true}></Image>
