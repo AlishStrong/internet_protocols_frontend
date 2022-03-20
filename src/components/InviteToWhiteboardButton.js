@@ -2,19 +2,28 @@
 import React, { useState } from 'react'
 import { Button, FormControl, InputGroup, Modal } from 'react-bootstrap'
 
-const InviteToWhiteboardButton = () => {
+const InviteToWhiteboardButton = ({ password }) => {
   const [show, setShow] = useState(false)
   const [buttonText, setButtonText] = useState('Copy')
+  const [passwordButtonText, setPasswordButtonText] = useState('Copy')
 
   const handleShow = () => setShow(true)
   const handleClose = () => setShow(false)
 
-  const copy = () => {
-    navigator.clipboard.writeText(window.location.href)
-    const input = document.getElementById('whiteboard-link')
+  const copy = (element) => {
+    const input = document.getElementById(element)
     input.select()
-    setButtonText('Copied')
-    setTimeout(() => setButtonText('Copy'), 4000)
+    if (element === 'whiteboard-link') {
+      navigator.clipboard.writeText(window.location.href)
+      setButtonText('Copied')
+      setTimeout(() => setButtonText('Copy'), 4000)
+    }
+
+    if (element === 'whiteboard-password') {
+      navigator.clipboard.writeText(password)
+      setPasswordButtonText('Copied')
+      setTimeout(() => setPasswordButtonText('Copy'), 4000)
+    }
   }
 
   return (
@@ -35,8 +44,35 @@ const InviteToWhiteboardButton = () => {
               aria-label="Invitation link to the whiteboard"
               aria-describedby="basic-addon2"
             />
-            <Button className={buttonText === 'Copied' ? 'border border-primary' : ''} variant="primary" id="button-addon2" onClick={copy}>{buttonText}</Button>
+            <Button
+              className={buttonText === 'Copied' ? 'border border-primary' : ''}
+              variant="primary"
+              id="button-addon2"
+              onClick={() => copy('whiteboard-link')}
+            >
+              {buttonText}
+            </Button>
           </InputGroup>
+          { password ?
+            <InputGroup className="mb-3">
+              <FormControl
+                className={passwordButtonText === 'Copied' ? 'border border-primary' : ''}
+                readOnly
+                id='whiteboard-password'
+                value={password}
+                aria-label="Password for the whiteboard"
+                aria-describedby="basic-addon2"
+              />
+              <Button
+                className={passwordButtonText === 'Copied' ? 'border border-primary' : ''}
+                variant="primary"
+                id="button-addon2"
+                onClick={() => copy('whiteboard-password')}
+              >
+                {passwordButtonText}
+              </Button>
+            </InputGroup>
+            : <></>}
         </Modal.Body>
         <Modal.Footer>
           <Button variant='secondary' onClick={handleClose}>

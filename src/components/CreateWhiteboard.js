@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { initializeWhiteboard } from '../reducers/whiteboardReducer'
+import { notify } from '../reducers/notificationReducer'
+import { setUserDispatcher } from '../reducers/userReducer'
+import whiteboardService from '../services/whiteboardService'
+import { WHITEBOARD_CREATION } from '../utils/error.constants'
 
 const CreateWhiteboard = () => {
   const [show, setShow] = useState(false)
 
-  const whiteboardId = useSelector(state => state.whiteboard)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (whiteboardId) {
-      navigate('/whiteboard/' + whiteboardId)
-    }
-  })
 
   const createWhiteboard = async (event) => {
     event.preventDefault()
@@ -32,8 +28,20 @@ const CreateWhiteboard = () => {
     event.target.whiteboardName.value = ''
     event.target.whiteboardPassword.value = ''
 
-    dispatch(initializeWhiteboard(payload))
+    const { whiteboardId, error, token } = await whiteboardService.createWhiteboard(payload)
+
     handleClose()
+
+    if (whiteboardId && token) {
+      dispatch(setUserDispatcher({ token, status: 'host' }))
+      dispatch(notify('success', `Your token ${token}`, `Whiteboard ${whiteboardId} was successfully created`))
+      navigate('/whiteboard/' + whiteboardId)
+    }
+
+    if (error) {
+      const { message } = error
+      dispatch(notify('danger', message, WHITEBOARD_CREATION))
+    }
   }
 
   const handleShow = () => setShow(true)
@@ -41,7 +49,6 @@ const CreateWhiteboard = () => {
 
   return (
     <>
-      <p>{whiteboardId}</p>
       <Button onClick={handleShow}>Create a session</Button>
 
       <Modal show={show} onHide={handleClose}>
