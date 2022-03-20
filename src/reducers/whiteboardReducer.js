@@ -9,15 +9,16 @@ const whiteboardSlice = createSlice({
   reducers: {
     createWhiteboard: (state, action) => {
       return action.payload
-    }
+    },
+    closeWhiteboard: () => null
   }
 })
 
-export const initializeWhiteboard = (whiteboardInfo, creatorName) => {
+export const initializeWhiteboard = (payload) => {
   return async dispatch => {
-    const { whiteboardId, error, token } = await whiteboardService.createWhiteboard(whiteboardInfo, creatorName)
+    const { whiteboardId, error, token } = await whiteboardService.createWhiteboard(payload)
     if (whiteboardId && token) {
-      await dispatch(setUserDispatcher(token))
+      await dispatch(setUserDispatcher({ token, status: 'host' }))
       await dispatch(createWhiteboard(whiteboardId))
       await dispatch(notify('success', `Your token ${token}`, `Whiteboard ${whiteboardId} was successfully created`))
     } else {
@@ -27,5 +28,7 @@ export const initializeWhiteboard = (whiteboardInfo, creatorName) => {
   }
 }
 
-export const { createWhiteboard } = whiteboardSlice.actions
+export const closeWhiteboardDispatcher = () => async dispatch => dispatch(closeWhiteboard())
+
+export const { createWhiteboard, closeWhiteboard } = whiteboardSlice.actions
 export default whiteboardSlice.reducer

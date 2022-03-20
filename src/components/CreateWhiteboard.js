@@ -20,17 +20,19 @@ const CreateWhiteboard = () => {
   const createWhiteboard = async (event) => {
     event.preventDefault()
 
-    const whiteboardInfo = {
-      name: event.target.whiteboardName.value,
-      password: event.target.whiteboardPassword.value
+    const payload = {}
+    payload.creator = event.target.creatorName.value ? event.target.creatorName.value : 'Session Host'
+    payload.whiteboard = {}
+    payload.whiteboard.name = event.target.whiteboardName.value ? event.target.whiteboardName.value : 'New whiteboard session'
+    if (event.target.whiteboardPassword.value) {
+      payload.whiteboard.password = event.target.whiteboardPassword.value
     }
-    const creatorName = event.target.creatorName.value
 
     event.target.creatorName.value = ''
     event.target.whiteboardName.value = ''
     event.target.whiteboardPassword.value = ''
 
-    dispatch(initializeWhiteboard(whiteboardInfo, creatorName))
+    dispatch(initializeWhiteboard(payload))
     handleClose()
   }
 

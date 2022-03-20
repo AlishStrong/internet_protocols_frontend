@@ -2,18 +2,16 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: window.localStorage.getItem('userToken'),
+  initialState: JSON.parse(window.localStorage.getItem('userJSON')),
   reducers: {
     setUser: (state, action) => {
-      window.localStorage.setItem('userToken', action.payload)
+      window.localStorage.setItem('userJSON', JSON.stringify(action.payload))
       return action.payload
     }
   }
 })
 
-export const setUserDispatcher = (user) => {
-  return async dispatch => dispatch(setUser(user))
-}
+export const setUserDispatcher = (userData) => async dispatch => dispatch(setUser(userData))
 
 export const { setUser } = userSlice.actions
 export default userSlice.reducer

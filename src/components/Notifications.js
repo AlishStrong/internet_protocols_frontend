@@ -7,9 +7,7 @@ const Notification = ({ notification, index }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (notification.type === 'danger') {
-      setTimeout(() => dispatch(completeNotification(index)), 5000)
-    }
+    setTimeout(() => dispatch(completeNotification(index)), 5000)
   })
 
   return (
