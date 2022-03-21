@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import { addNote } from '../reducers/stickyNoteReducer'
 import { useSelector } from 'react-redux'
 import { uid } from 'uid'
+import { addStickyNote } from '../reducers/stickyNoteReducer'
 
 const Whiteboard = () => {
   const whiteboardId = useParams().whiteboardId
@@ -18,13 +19,15 @@ const Whiteboard = () => {
   const dispatch = useDispatch()
 
   const createStickyNote = () => {
+    let id = uid(10)
     dispatch(addNote({
-      id: uid(10),
+      id: id,
       key: stickyNotes.length,
       text: '',
       pos: { x: 0, y: 0 },
       editState : false
     }))
+    dispatch(addStickyNote(id, { x: 0, y: 0 } , '' , false , whiteboardId))
   }
 
   return (

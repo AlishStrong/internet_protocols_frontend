@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import removeElement from '../services/elementService'
+import { removeElement, addElement } from '../services/elementService'
 
 const stickyNoteSlice = createSlice({
   name: 'stickyNote',
@@ -34,7 +34,7 @@ const stickyNoteSlice = createSlice({
       const pos = action.payload.pos
       const text = action.payload.text
       const editState = action.payload.editState
-      state.notes = [...state.notes,{ id: id, pos: pos, text: text, editState: editState }]
+      state.notes = [...state.notes,{ elementiId: id, pos: pos, text: text, editState: editState }]
     },
     removeNote: (state, action) => {
       const id = action.payload.id
@@ -51,6 +51,13 @@ const stickyNoteSlice = createSlice({
 export const removeStickyNote = (elementId,whiteboardId) => {
   return async () => {
     await removeElement(elementId,whiteboardId)
+  }
+}
+
+export const addStickyNote = (elementId, pos, text, editState, whiteboardId) => {
+  return async () => {
+    console.log(elementId, pos, text, editState, whiteboardId)
+    await addElement(elementId, pos, text, editState, whiteboardId)
   }
 }
 
