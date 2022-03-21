@@ -14,7 +14,7 @@ const InviteToWhiteboardButton = ({ password }) => {
     const input = document.getElementById(element)
     input.select()
     if (element === 'whiteboard-link') {
-      navigator.clipboard.writeText(window.location.href)
+      navigator.clipboard.writeText(window.location.href+'/join')
       setButtonText('Copied')
       setTimeout(() => setButtonText('Copy'), 4000)
     }

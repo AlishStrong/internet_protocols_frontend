@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom'
 import Notifications from './components/Notifications'
 import Landing from './pages/Landing'
+import ReuqestToJoin from './pages/RequestToJoin'
 import WhiteboardPage from './pages/WhiteboardPage'
 
 const App = () => {
@@ -13,6 +14,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='whiteboard/:whiteboardId' element={<WhiteboardPage />} />
+        <Route path='whiteboard/:whiteboardId/join' element={<ReuqestToJoin />} />
       </Routes>
     </Router>
   )
