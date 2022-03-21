@@ -27,9 +27,9 @@ const Whiteboard = () => {
       pos: { x: 0, y: 0 },
       editState : false
     }))
-    dispatch(addStickyNote(id, { x: 0, y: 0 } , '' , false , whiteboardId))
+    dispatch(addStickyNote(id, { x: 0, y: 0 } , '' , false ,whiteboardId))
   }
-
+  //console.log(stickyNotes)
   return (
     <>
       <div className='toolbar'>

@@ -1,10 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { removeElement, addElement } from '../services/elementService'
+import { removeElement, addElement, updateElementEditor, editSticky } from '../services/elementService'
 
 const stickyNoteSlice = createSlice({
   name: 'stickyNote',
   initialState: { notes : [] },
   reducers: {
+    setCurrentUser: (state, action) => {
+      const id = action.payload.id
+      const userId = action.payload.userId
+      //console.log(userId)
+      let newNotes = [...state.notes]
+      const ind = newNotes.findIndex(note => note.id === id)
+      newNotes[ind].currentUser = userId
+      state.notes = newNotes
+    },
     setEditState: (state, action) => {
       const id = action.payload.id
       const editState = action.payload.editState
@@ -34,7 +43,7 @@ const stickyNoteSlice = createSlice({
       const pos = action.payload.pos
       const text = action.payload.text
       const editState = action.payload.editState
-      state.notes = [...state.notes,{ id: id, pos: pos, text: text, editState: editState }]
+      state.notes = [...state.notes,{ id: id, pos: pos, text: text, editState: editState, currentUser: 'noUser' }]
     },
     removeNote: (state, action) => {
       const id = action.payload.id
@@ -61,6 +70,20 @@ export const addStickyNote = (elementId, pos, text, editState, whiteboardId) => 
   }
 }
 
+export const updateStickyNoteEditor = (elementId, whiteboardId, userID, editState) => {
+  return async () => {
+    //console.log(elementId, pos, text, editState, whiteboardId)
+    await updateElementEditor(elementId, whiteboardId, userID, editState)
+  }
+}
 
-export const { setEditState, setPos, setText, addNote, removeNote } = stickyNoteSlice.actions
+export const editStickyNote = (elementId, whiteboardId, pos, text) => {
+  return async () => {
+    //console.log(elementId, pos, text, editState, whiteboardId)
+    await editSticky(elementId, whiteboardId, pos, text)
+  }
+}
+
+
+export const { setEditState, setPos, setText, addNote, removeNote, setCurrentUser } = stickyNoteSlice.actions
 export default stickyNoteSlice.reducer
