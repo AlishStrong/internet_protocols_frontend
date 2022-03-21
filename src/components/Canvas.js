@@ -6,11 +6,12 @@ import {
   setDrawing,
   setErase,
   pushStroke,
-  popStroke,
+  undoStroke,
   pushPoint,
   clearCurrent,
-  updateCanvas
+  setRedraw,
 } from '../reducers/canvasReducer'
+import updateCanvas from '../services/canvasService'
 
 const Canvas = () => {
   const canvasRef = useRef(null)
@@ -20,6 +21,7 @@ const Canvas = () => {
   const strokes = useSelector(state => state.canvas.strokes)
   const currentDrawing = useSelector(state => state.canvas.currentDrawing)
   const whiteboardId = useSelector(state => state.whiteboard)
+  const shouldRedraw = useSelector(state => state.canvas.shouldRedraw)
 
   const toggleErase = () => {
     dispatch(setErase(!isErasing))
@@ -57,7 +59,7 @@ const Canvas = () => {
     dispatch(pushStroke(currentDrawing))
     dispatch(setDrawing(false))
     dispatch(clearCurrent())
-    dispatch(updateCanvas(strokes, whiteboardId))
+    updateCanvas(strokes, whiteboardId)
   }
 
   const redrawAll = () => {
@@ -86,18 +88,19 @@ const Canvas = () => {
   }
 
   const undo = () => {
-    dispatch(popStroke())
-    redrawAll()
-    dispatch(updateCanvas(strokes, whiteboardId))
-    console.log(strokes)
+    dispatch(undoStroke())
+    updateCanvas(strokes, whiteboardId)
   }
 
   useEffect(() => {
-    console.log(whiteboardId)
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
     context.strokeStyle = '#c90606'
     context.lineWidth = 2
+    if (shouldRedraw) {
+      redrawAll()
+      dispatch(setRedraw(false))
+    }
 
     canvas.onmousedown = startDrawing
     canvas.onmousemove = draw

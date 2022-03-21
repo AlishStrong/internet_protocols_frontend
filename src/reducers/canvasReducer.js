@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import updateCanvasReq from '../services/canvasService'
 
 const canvasSlice = createSlice({
   name: 'canvas',
@@ -8,6 +7,7 @@ const canvasSlice = createSlice({
     isErasing: false,
     strokes: [],
     currentDrawing: [],
+    shouldRedraw: false
   },
   reducers: {
     setDrawing: (state, action) => {
@@ -19,8 +19,12 @@ const canvasSlice = createSlice({
     pushStroke: (state, action) => {
       state.strokes.push(action.payload)
     },
-    popStroke: (state) => {
+    undoStroke: (state) => {
       state.strokes.pop()
+      state.shouldRedraw = true
+    },
+    setRedraw: (state, action) => {
+      state.shouldRedraw = action.payload
     },
     pushPoint: (state, action) => {
       state.currentDrawing.push(action.payload)
@@ -31,12 +35,6 @@ const canvasSlice = createSlice({
   }
 })
 
-export const updateCanvas = (strokes, whiteboardId) => {
-  return async () => {
-    await updateCanvasReq(strokes, whiteboardId)
-  }
-}
 
-
-export const { setDrawing, setErase, pushStroke, popStroke, pushPoint, clearCurrent } = canvasSlice.actions
+export const { setDrawing, setErase, pushStroke, undoStroke, pushPoint, clearCurrent, setRedraw } = canvasSlice.actions
 export default canvasSlice.reducer

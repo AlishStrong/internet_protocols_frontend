@@ -2,7 +2,7 @@ import axios from 'axios'
 import { BACKEND_ADDRESS, DRAW_API } from '../utils/config'
 import { CANVAS_UPDATE } from '../utils/error.constants'
 
-const updateCanvasReq = async (strokes, whiteboardId) => {
+const updateCanvas = async (strokes, whiteboardId) => {
   const payload = { actionId: 13, whiteboardId: whiteboardId, strokes: strokes }
   return axios.post(BACKEND_ADDRESS + DRAW_API, payload).then(response => {
     if (response && response.status === 200) {
@@ -20,5 +20,5 @@ const updateCanvasReq = async (strokes, whiteboardId) => {
   })
 }
 
-export default updateCanvasReq
+export default updateCanvas
 
