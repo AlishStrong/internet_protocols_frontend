@@ -7,7 +7,6 @@ import { setEditState,setText,setPos, removeStickyNote, removeNote } from '../re
 
 const StickyNote = (props) => {
 
-  //console.log(props)
   const dispatch = useDispatch()
   const notes = useSelector(state => state.stickyNote.notes)
   const ind = notes.findIndex(note => note.id === props.id)
@@ -39,8 +38,9 @@ const StickyNote = (props) => {
 
   const deleteNote = () => {
     // need element id
+    const id = props.id
     dispatch(removeNote( { id: props.id, whiteboardId: whiteboardId }))
-    dispatch(removeStickyNote( { id: props.id, whiteboardId: whiteboardId }))
+    dispatch(removeStickyNote(  id,whiteboardId ))
   }
 
   const textInput = (e) => {

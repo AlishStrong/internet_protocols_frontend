@@ -1,11 +1,12 @@
 import axios from 'axios'
-import { BACKEND_ADDRESS, ELEMENT_ADD_PATH, ELEMENT_REMOVE_API } from '../utils/config'
+import { BACKEND_ADDRESS, ELEMENT_ADD_PATH, ELEMENT_REMOVE_PATH } from '../utils/config'
 import { ELEMENT_UPDATE } from '../utils/error.constants'
 
 export const removeElement = async (elementId, whiteboardId) => {
   // UC8 and UC10 combined as they are practically the same
-  const payload = { actionId: 8, whiteboardId: whiteboardId, elementId: elementId }
-  return axios.post(BACKEND_ADDRESS + ELEMENT_REMOVE_API, payload).then(response => {
+  console.log(whiteboardId)
+  const payload = { actionId: 8, whiteboardId: 1, elementId: elementId }
+  return axios.post(BACKEND_ADDRESS + ELEMENT_REMOVE_PATH, payload).then(response => {
     if (response && response.status === 200) {
       return response.data
     } else {
