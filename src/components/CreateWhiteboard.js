@@ -28,12 +28,12 @@ const CreateWhiteboard = () => {
     event.target.whiteboardName.value = ''
     event.target.whiteboardPassword.value = ''
 
-    const { whiteboardId, error, token } = await whiteboardService.createWhiteboard(payload)
+    const { whiteboardId, error, token, hostId } = await whiteboardService.createWhiteboard(payload)
 
     handleClose()
 
     if (whiteboardId && token) {
-      dispatch(setUserDispatcher({ token, status: 'host' }))
+      dispatch(setUserDispatcher({ token, status: 'host', userId: hostId }))
       dispatch(notify('success', `Your token ${token}`, `Whiteboard ${whiteboardId} was successfully created`))
       navigate('/whiteboard/' + whiteboardId)
     }

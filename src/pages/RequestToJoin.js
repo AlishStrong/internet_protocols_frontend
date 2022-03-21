@@ -9,7 +9,7 @@ import whiteboardService from '../services/whiteboardService'
 import { REQUEST_TO_JOIN } from '../utils/error.constants'
 
 const ReuqestToJoin = () => {
-  const id = useParams().whiteboardId
+  const whiteboardId = useParams().whiteboardId
 
   const [passwordRequired, setPasswordRequired] = useState(null)
 
@@ -17,7 +17,7 @@ const ReuqestToJoin = () => {
   const dispatch = useDispatch()
 
   useEffect(async () => {
-    const { protected: isProtected, error } = await whiteboardService.isProtected(id)
+    const { protected: isProtected, error } = await whiteboardService.isProtected(whiteboardId)
 
     if (error) {
       dispatch(notify('danger', error.message, error.title))
@@ -38,24 +38,24 @@ const ReuqestToJoin = () => {
       password = event.target.whiteboardPassword.value
     }
 
-    const { userToken, message, error } = await whiteboardService.reuqestToJoin(id, { name, password })
+    const { userToken, userId, message, error } = await whiteboardService.reuqestToJoin(whiteboardId, { name, password })
 
     if (userToken && message) {
-      dispatch(setUserDispatcher({ token: userToken, status: 'pending' }))
-      dispatch(notify('info', message, 'Your request to join have been processed'))
+      dispatch(setUserDispatcher({ token: userToken, status: 'pending', userId }))
+      dispatch(notify('info', message, 'Your request to join is sent to host for processing'))
     }
 
     if (error) {
       dispatch(notify('danger', error.message, REQUEST_TO_JOIN))
     }
 
-    navigate('/')
+    navigate('/', { state: { whiteboardId } })
   }
 
   if (passwordRequired === null) {
     return (
       <Container>
-        {id}. Password is null
+        {whiteboardId}. Password is null
       </Container>
     )
   }

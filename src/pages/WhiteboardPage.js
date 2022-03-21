@@ -60,6 +60,27 @@ const WhiteboardPage = () => {
   }
 
   if (user && whiteboard) {
+    const ws = new WebSocket('ws://localhost:3001/ws')
+    ws.onopen = () => {
+      const connectionMessage = {
+        token: user.token,
+        status: user.status,
+        userId: user.userId,
+        whiteboardId: id,
+        messageType: 'connection'
+      }
+      console.log('Frontend client makes a WebSocket connection', connectionMessage)
+      ws.send(JSON.stringify(connectionMessage))
+    }
+
+    ws.onmessage = (event) => {
+      console.log('Frontend received a message', event.data)
+      const { userId: wsmUserId, status: wsmStatus, whiteboardId: wsmWhiteboardId, messageType, wsmMessageType } = JSON.parse(event.data)
+      if (wsmMessageType === 'joining' && wsmStatus === 'pending' && wsmWhiteboardId === id) {
+        console.log(`User ${wsmUserId} is asking to join `)
+      }
+    }
+
     if (user.status === 'host') {
       return (
         <>
