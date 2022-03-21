@@ -1,10 +1,10 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
-import CreateSession from '../components/CreateSession'
+import CreateWhiteboard from '../components/CreateWhiteboard'
 
 const Landing = () => (
   <Container>
-    <CreateSession />
+    <CreateWhiteboard />
   </Container>
 )
 
