@@ -1,29 +1,59 @@
 import { createSlice } from '@reduxjs/toolkit'
+import removeElement from '../services/elementService'
 
 const stickyNoteSlice = createSlice({
   name: 'stickyNote',
-  initialState: {
-    editState : false,
-    text : '',
-    pos : { x: 0, y:0 }
-  },
+  initialState: { notes : [] },
   reducers: {
     setEditState: (state, action) => {
-      state.editState = action.payload
+      const id = action.payload.id
+      const editState = action.payload.editState
+      let newNotes = [...state.notes]
+      const ind = newNotes.findIndex(note => note.id === id)
+      newNotes[ind].editState = editState
+      state.notes = newNotes
     },
     setText: (state, action) => {
-      state.text = action.payload
-    },
-    removeNote: (state, action) => {
-      // whole element needs to be removed
-      return action.payload
+      const id = action.payload.id
+      const text = action.payload.text
+      let newNotes = [...state.notes]
+      const ind = newNotes.findIndex(note => note.id === id)
+      newNotes[ind].text = text
+      state.notes = newNotes
     },
     setPos: (state, action) => {
-      state.pos = action.payload
+      const id = action.payload.id
+      const pos = action.payload.pos
+      let newNotes = [...state.notes]
+      const ind = newNotes.findIndex(note => note.id === id)
+      newNotes[ind].pos = pos
+      state.notes = newNotes
+    },
+    addNote: (state, action) => {
+      const id = action.payload.id
+      const pos = action.payload.pos
+      const text = action.payload.text
+      const editState = action.payload.editState
+      state.notes = [...state.notes,{ id: id, pos: pos, text: text, editState: editState }]
+    },
+    removeNote: (state, action) => {
+      const id = action.payload.id
+      const whiteboardId = action.payload.whiteboardId
+      console.log(whiteboardId)
+      let newNotes = [...state.notes]
+      const ind = newNotes.findIndex(note => note.id === id)
+      newNotes.splice(ind,1)
+      state.notes = newNotes
     }
   }
 })
 
+export const removeStickyNote = (elementId,whiteboardId) => {
+  return async () => {
+    await removeElement(elementId,whiteboardId)
+  }
+}
 
-export const { setEditState, setPos, setText, removeNote  } = stickyNoteSlice.actions
+
+export const { setEditState, setPos, setText, addNote, removeNote } = stickyNoteSlice.actions
 export default stickyNoteSlice.reducer

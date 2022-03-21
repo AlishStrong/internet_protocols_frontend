@@ -3,8 +3,8 @@
   background-color: #fff;
   box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
   margin: 20px;
-  height: 300px;
-  width: 300px;
+  height: 160ppx;
+  width: 200px;
   position: absolute;
 }
 
@@ -27,7 +27,7 @@
 .note .main {
   background-color: rgb(245, 232, 159);
   overflow: auto;
-  height: 300px;
+  height: 160px;
   width: 100%;
 }
 
@@ -38,7 +38,7 @@
   font-size: 1.2rem;
   border: none;
   width: 100%;
-  height: 300px;
+  height: 160px;
   overflow: auto;
   resize: none;
 }
@@ -49,4 +49,13 @@
 
 .note .commentField {
   background-color: rgb(238, 237, 235);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+}
+
+.toolbar .btn.btn-primary{
+  margin-right: 5px;
 }
