@@ -68,7 +68,8 @@ const ImageSticky = (props) => {
   const newComment = (e) => {
     e.preventDefault()
     const comment = e.target.comment.value
-    dispatch(addComment({ id:props.id,comment:comment }))
+    const commentWithUser = `${userId}: ${comment}`
+    dispatch(addComment({ id:props.id,comment:commentWithUser }))
   }
 
   const deleteComment = (e) => {
@@ -86,7 +87,7 @@ const ImageSticky = (props) => {
   // can be resizeable but wasn't really a requirement so no need for extra work ?
   return (
     <Draggable handle='strong' onDrag={handleDrag} disabled={!editState}>
-      <div className="note" id='note' style={ { overflow:'auto' } }>
+      <div className="image" id='note' style={ { overflow:'auto' } }>
         <strong>
           <div className="header">
             <button className="editLock" onClick={editLock}><i className="fas fa-edit"></i></button>
