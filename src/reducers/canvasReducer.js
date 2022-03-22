@@ -7,7 +7,8 @@ const canvasSlice = createSlice({
     isErasing: false,
     strokes: [],
     currentDrawing: [],
-    shouldRedraw: false
+    shouldRedraw: false,
+    wsUpdate: false
   },
   reducers: {
     setDrawing: (state, action) => {
@@ -31,10 +32,16 @@ const canvasSlice = createSlice({
     },
     clearCurrent: (state) => {
       state.currentDrawing = []
+    },
+    updateStrokes: (state, action) => {
+      state.strokes = action.payload
+    },
+    updateWsUpdate: (state, action) => {
+      state.wsUpdate = action.payload
     }
   }
 })
 
 
-export const { setDrawing, setErase, pushStroke, undoStroke, pushPoint, clearCurrent, setRedraw } = canvasSlice.actions
+export const { setDrawing, setErase, pushStroke, undoStroke, pushPoint, clearCurrent, setRedraw, updateStrokes, updateWsUpdate } = canvasSlice.actions
 export default canvasSlice.reducer
