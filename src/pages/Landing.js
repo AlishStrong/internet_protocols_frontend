@@ -4,6 +4,8 @@ import { Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import CreateWhiteboard from '../components/CreateWhiteboard'
+import { notify } from '../reducers/notificationReducer'
+import { setUserDispatcher } from '../reducers/userReducer'
 
 const Landing = () => {
   const location = useLocation()
@@ -13,7 +15,7 @@ const Landing = () => {
 
   if (location.state && location.state.whiteboardId && user) {
     const whiteboardId = location.state.whiteboardId
-    const { token, status, userId } = user
+    const { token, status, userId, name } = user
     console.log('This was after request to join', { whiteboardId, token, status, userId })
 
     const ws = new WebSocket('ws://localhost:3001/ws')
@@ -38,6 +40,19 @@ const Landing = () => {
 
     ws.onmessage = (event) => {
       console.log('Frontend received a message', event.data)
+      const { messageType, status: decision, userId: msgUserId, whiteboardId: msgWhiteboardId } = JSON.parse(event.data)
+      if (messageType === 'joining' && msgUserId === userId && msgWhiteboardId === whiteboardId) {
+        if (decision === 'approved') {
+          dispatch(setUserDispatcher({ token, status: 'user', userId, name }))
+          dispatch(notify('success', 'Host approved your request', 'Request to join'))
+          navigate('/whiteboard/' + whiteboardId)
+        }
+        if (decision === 'declined') {
+          dispatch(setUserDispatcher(null))
+          dispatch(notify('warning', 'Host declined your request', 'Request to join'))
+          navigate('/')
+        }
+      }
     }
   }
 

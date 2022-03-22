@@ -102,10 +102,35 @@ const reuqestToJoin = async (whiteboardId, requestData) =>  {
     })
 }
 
+const processRequest = async (whiteboardId, userId, decision, token) => {
+  const config = {
+    headers: { Authorization: 'bearer ' + token },
+  }
+
+  const decisionPayload = { whiteboardId, userId, decision }
+
+  return axios.post(`${path}/process-request-to-join`, decisionPayload, config)
+    .then(response => {
+      if (response && response.status === 200) {
+        return response.data
+      } else {
+        const { error } = response.data
+        throw new Error(error)
+      }
+    }).catch(({ message }) => {
+      const error = {
+        message,
+        title: WHITEBOARD_CLOSURE
+      }
+      return { error }
+    })
+}
+
 export default {
   createWhiteboard,
   getWhiteboard,
   closeWhiteboard,
   isProtected,
-  reuqestToJoin
+  reuqestToJoin,
+  processRequest
 }

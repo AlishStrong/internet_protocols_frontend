@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import CloseWhiteboardButton from '../components/CloseWhiteboardButton'
 import InviteToWhiteboardButton from '../components/InviteToWhiteboardButton'
+import RequestsToJoin from '../components/RequestsToJoin'
 import { notify } from '../reducers/notificationReducer'
-import { setWhiteboardDispatcher } from '../reducers/whiteboardReducer'
+import { closeWhiteboardDispatcher, setWhiteboardDispatcher } from '../reducers/whiteboardReducer'
 import whiteboardService from '../services/whiteboardService'
 import { UNAUTHORIZED_BODY, WHITEBOARD_ACCESS } from '../utils/error.constants'
 
@@ -28,6 +29,8 @@ const WhiteboardPage = () => {
     }
     return result
   }
+
+  const [joinRequests, setJoinRequests] = useState([])
 
   const { user, whiteboard } = useSelector(
     state => ({ user: state.user, whiteboard: state.whiteboard }),
@@ -75,9 +78,33 @@ const WhiteboardPage = () => {
 
     ws.onmessage = (event) => {
       console.log('Frontend received a message', event.data)
-      const { userId: wsmUserId, status: wsmStatus, whiteboardId: wsmWhiteboardId, messageType, wsmMessageType } = JSON.parse(event.data)
-      if (wsmMessageType === 'joining' && wsmStatus === 'pending' && wsmWhiteboardId === id) {
-        console.log(`User ${wsmUserId} is asking to join `)
+      const { userId: wsmUserId, status: wsmStatus, whiteboardId: wsmWhiteboardId, messageType: wsmMessageType } = JSON.parse(event.data)
+      console.log('msg', { userId: wsmUserId, status: wsmStatus, whiteboardId: wsmWhiteboardId, messageType: wsmMessageType })
+      if (wsmMessageType === 'joining') {
+        if (wsmStatus === 'pending' && wsmWhiteboardId === id) {
+          console.log(`User ${wsmUserId} is asking to join `)
+          if (joinRequests.find(uid => uid === wsmUserId)) {
+            setJoinRequests(joinRequests)
+          } else {
+            setJoinRequests(joinRequests.concat(wsmUserId))
+          }
+        }
+        if ((wsmStatus === 'declined' || wsmStatus === 'approved') && wsmWhiteboardId === id) {
+          // setJoinRequests(joinRequests.filter(uid => uid !== wsmUserId))
+          console.log('The request needs to be removed!')
+          console.log('joinRequests beforeFilter', joinRequests)
+          console.log('joinRequests afterFilter', joinRequests.filter(uid => uid !== wsmUserId))
+          setJoinRequests(joinRequests.filter(uid => uid !== wsmUserId))
+        }
+      }
+
+      if (wsmMessageType === 'connection' && wsmStatus === 'closed' && wsmWhiteboardId === id) {
+        console.log('The session has been terminated!')
+        dispatch(notify('warning', 'You will soon be redirected to the main page', 'The whiteboard session has been terminated'))
+        setTimeout(() => {
+          dispatch(closeWhiteboardDispatcher())
+          navigate('/')
+        }, 4900)
       }
     }
 
@@ -89,6 +116,7 @@ const WhiteboardPage = () => {
             <br />
             <CloseWhiteboardButton whiteboardId={id} token={user.token} />
             <InviteToWhiteboardButton whiteboard={whiteboard} password={whiteboard.password} />
+            <RequestsToJoin requesters={joinRequests} whiteboardId={id} token={user.token} />
           </Container>
         </>
       )

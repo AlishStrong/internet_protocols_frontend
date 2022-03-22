@@ -41,7 +41,7 @@ const ReuqestToJoin = () => {
     const { userToken, userId, message, error } = await whiteboardService.reuqestToJoin(whiteboardId, { name, password })
 
     if (userToken && message) {
-      dispatch(setUserDispatcher({ token: userToken, status: 'pending', userId }))
+      dispatch(setUserDispatcher({ token: userToken, status: 'pending', userId, name }))
       dispatch(notify('info', message, 'Your request to join is sent to host for processing'))
     }
 
