@@ -1,22 +1,19 @@
-import React, { useRef } from 'react'
-import { Container,Button } from 'react-bootstrap'
+import React from 'react'
+import { Button, Form } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import Canvas from '../components/Canvas'
-import SaveWhiteboard from '../components/SaveWhiteboard'
-import '../style/App.css'
-import StickyNote from './StickyNote'
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
 import { uid } from 'uid'
-import { addStickyNote,addNote } from '../reducers/stickyNoteReducer'
-import { Form } from 'react-bootstrap'
-import ImageSticky from './ImageSticky'
 import { addImage, addStickyImage } from '../reducers/imageReducer'
+import { addNote, addStickyNote } from '../reducers/stickyNoteReducer'
+import '../style/App.css'
+import ImageSticky from './ImageSticky'
+import StickyNote from './StickyNote'
 
-const Whiteboard = () => {
+const Toolbar = () => {
   const whiteboardId = useParams().whiteboardId
-  const rootRef = useRef(null)
   const stickyNotes = useSelector(state => state.stickyNote.notes)
+  const userId = useSelector(state => state.user.userId)
+
   const images = useSelector(state => state.imageSticky.images)
   const dispatch = useDispatch()
 
@@ -59,7 +56,7 @@ const Whiteboard = () => {
         pos: { x: 0, y: 0 },
         editState : false
       }))
-      dispatch(addStickyImage(id, { x: 0, y: 0 } , [] , src , false ,whiteboardId))
+      dispatch(addStickyImage(id, { x: 0, y: 0 } , [] , src , false ,whiteboardId, userId))
     }
   }
 
@@ -91,17 +88,8 @@ const Whiteboard = () => {
           />
         ))}
       </div>
-
-      <SaveWhiteboard rootNode={rootRef.current}>
-      </SaveWhiteboard>
-      <Container style={{ backgroundColor: 'white' }} ref={rootRef}>
-        Welcome to the whiteboard {whiteboardId}
-        <Canvas>
-        </Canvas>
-      </Container>
-
     </>
   )
 }
 
-export default Whiteboard
+export default Toolbar

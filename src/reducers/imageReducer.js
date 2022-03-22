@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { removeElement, addImageElement, updateElementEditor, editImage } from '../services/elementService'
+import { addImageElement, editImage, removeElement, updateElementEditor } from '../services/elementService'
 
 const imageStickySlice = createSlice({
   name: 'imageSticky',
@@ -57,6 +57,9 @@ const imageStickySlice = createSlice({
       const src = action.payload.src
       state.images = [...state.images,{ id: id, pos: pos,src:src, comments: comments, editState: editState, currentUser: 'noUser' }]
     },
+    setImages: (state, action) => {
+      state.images = action.payload
+    },
     removeImage: (state, action) => {
       const id = action.payload.id
       const whiteboardId = action.payload.whiteboardId
@@ -97,5 +100,5 @@ export const editStickyImage = (elementId, whiteboardId, pos, comments) => {
 }
 
 
-export const { setEditState, setPos, addComment, removeComment, setCurrentUser, addImage, removeImage } = imageStickySlice.actions
+export const { setEditState, setPos, addComment, removeComment, setCurrentUser, addImage, setImages, removeImage } = imageStickySlice.actions
 export default imageStickySlice.reducer
