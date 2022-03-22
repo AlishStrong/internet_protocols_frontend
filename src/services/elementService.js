@@ -62,8 +62,28 @@ export const editSticky = async (elementId, whiteboardId, pos, text) => {
   })
 }
 
+export const editImage = async (elementId, whiteboardId, pos, comments) => {
+  // UC11&12
+  const payload = { actionId: 11, whiteboardId: whiteboardId, elementId: elementId , pos: pos, comments: comments }
+  console.log(payload)
+  return axios.post(BACKEND_ADDRESS + ELEMENT_EDIT_PATH, payload).then(response => {
+    if (response && response.status === 200) {
+      return response.data
+    } else {
+      const { error } = response.data
+      throw new Error(error)
+    }
+  }).catch(({ message }) => {
+    const error = {
+      message,
+      title: ELEMENT_UPDATE
+    }
+    return { error }
+  })
+}
+
 export const addElement = async (elementId, pos, text, editState, whiteboardId) => {
-  // UC6 AND UC9
+  // UC6
   const payload = { actionId: 6, whiteboardId: whiteboardId, elementId: elementId , pos: pos, text: text, editState: editState, currentUser: 'noUser' }
   //console.log(payload)
   return axios.post(BACKEND_ADDRESS + ELEMENT_ADD_PATH, payload).then(response => {
@@ -81,5 +101,26 @@ export const addElement = async (elementId, pos, text, editState, whiteboardId) 
     return { error }
   })
 }
+
+export const addImageElement = async (elementId, pos, comments,src, editState, whiteboardId) => {
+  // UC9
+  const payload = { actionId: 9, whiteboardId: whiteboardId, elementId: elementId , pos: pos,src: src, comments: comments, editState: editState, currentUser: 'noUser' }
+  //console.log(payload)
+  return axios.post(BACKEND_ADDRESS + ELEMENT_ADD_PATH, payload).then(response => {
+    if (response && response.status === 200) {
+      return response.data
+    } else {
+      const { error } = response.data
+      throw new Error(error)
+    }
+  }).catch(({ message }) => {
+    const error = {
+      message,
+      title: ELEMENT_UPDATE
+    }
+    return { error }
+  })
+}
+
 
 
